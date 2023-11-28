@@ -1,4 +1,4 @@
-package com.app.canyonfrs.kingmojang
+package com.app.canyonfrs.kingmojang.memo
 
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -7,7 +7,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.restdocs.headers.HeaderDocumentation.*
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document
-import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get
 import org.springframework.restdocs.payload.PayloadDocumentation.*
 import org.springframework.restdocs.request.RequestDocumentation.parameterWithName
@@ -154,7 +153,7 @@ class MemoAcceptanceTest {
             }
             .andDo(
                 document(
-                    "memos/get by id",
+                    "memos/get_by_id",
                     pathParameters(
                         parameterWithName("memoId").description("조회할 메모의 ID")
                     ),
