@@ -1,0 +1,30 @@
+=== 메모 생성
+스트리머가 메모를 생성하는 API
+
+==== 메모 생성 요청 샘플
+include::build/generated-snippets/memos/create/http-request.adoc[]
+
+==== 메모 생성 응답 샘플
+include::build/generated-snippets/memos/create/http-response.adoc[]
+
+==== 메모 생성 CURL 샘플
+include::build/generated-snippets/memos/create/curl-request.adoc[]
+
+==== 메모 생성 응답 필드
+include::build/generated-snippets/memos/create/response-fields.adoc[]
+
+
+=== 메모 수정
+스트리머가 메모를 수정하는 API
+
+==== 메모 수정 요청 샘플
+include::build/generated-snippets/memos/update/http-request.adoc[]
+
+==== 메모 수정 응답 샘플
+include::build/generated-snippets/memos/update/http-response.adoc[]
+
+==== 메모 수정 CURL 샘플
+include::build/generated-snippets/memos/update/curl-request.adoc[]
+
+==== 메모 수정 응답 필드
+include::build/generated-snippets/memos/update/response-fields.adoc[]
