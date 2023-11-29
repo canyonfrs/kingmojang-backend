@@ -2,10 +2,6 @@ package com.app.canyonfrs.kingmojang.member
 
 import org.springframework.data.jpa.repository.JpaRepository
 
-interface MemberRepository {
+interface MemberRepository : JpaRepository<Member, Long> {
     fun findByToken(token: String): Member
-}
-
-interface MemberJpaRepository : MemberRepository, JpaRepository<Member, Long> {
-    override fun findByToken(token: String): Member
 }

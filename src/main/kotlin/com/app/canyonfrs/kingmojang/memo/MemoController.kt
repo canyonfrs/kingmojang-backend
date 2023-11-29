@@ -1,5 +1,6 @@
 package com.app.canyonfrs.kingmojang.memo
 
+import com.app.canyonfrs.kingmojang.common.BaseCursorPageResponse
 import com.app.canyonfrs.kingmojang.member.Member
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
@@ -35,6 +36,17 @@ class MemoController(
         @PathVariable memoId: Long
     ): ResponseEntity<MemoResponse> {
         val response = memoService.getMemo(memoId)
+
+        return ResponseEntity.ok(response)
+    }
+
+    @GetMapping("/api/v1/memos")
+    fun getMemos(
+        @RequestParam streamerId: Long? = null,
+        @RequestParam lastCursorId: Long = Long.MAX_VALUE,
+        @RequestParam pageSize: Int = 20
+    ): ResponseEntity<MemoCursorPageResponse> {
+        val response = memoService.getMemos(MemoCursorPageCondition.of(lastCursorId, pageSize, streamerId))
 
         return ResponseEntity.ok(response)
     }
