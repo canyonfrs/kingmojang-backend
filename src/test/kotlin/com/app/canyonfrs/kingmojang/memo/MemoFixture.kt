@@ -17,5 +17,20 @@ class MemoFixture {
                 id = id
             )
         }
+
+        fun memos(
+            size: Int = 20,
+            writerId: Long = 1L,
+            visibility: Visibility = Visibility.PUBLIC,
+        ): List<Memo> {
+
+            return (1..size).map {
+                aMemo(
+                    writerId = writerId,
+                    visibility = visibility,
+                    id = null
+                )
+            }
+        }
     }
 }
