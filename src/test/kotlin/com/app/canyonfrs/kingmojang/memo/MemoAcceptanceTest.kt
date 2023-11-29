@@ -1,18 +1,31 @@
 package com.app.canyonfrs.kingmojang.memo
 
+import jakarta.servlet.Filter
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.restdocs.RestDocumentationContextProvider
 import org.springframework.restdocs.headers.HeaderDocumentation.*
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document
+import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get
+import org.springframework.restdocs.operation.preprocess.Preprocessors.*
+import org.springframework.restdocs.payload.JsonFieldType
 import org.springframework.restdocs.payload.PayloadDocumentation.*
 import org.springframework.restdocs.request.RequestDocumentation.*
 import org.springframework.test.web.servlet.MockMvc
+import org.springframework.test.web.servlet.MockMvcBuilder
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers.print
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
+import org.springframework.test.web.servlet.setup.DefaultMockMvcBuilder
+import org.springframework.test.web.servlet.setup.MockMvcBuilders
+import org.springframework.web.context.WebApplicationContext
+import org.springframework.web.filter.CharacterEncodingFilter
 
 
 @AutoConfigureRestDocs
@@ -44,6 +57,8 @@ class MemoAcceptanceTest {
             .andDo(
                 document(
                     "memos/create",
+                    preprocessRequest(prettyPrint()),
+                    preprocessResponse(prettyPrint()),
                     requestHeaders(
                         headerWithName("Authorization").description("스트리머 토큰")
                     ),
@@ -57,7 +72,7 @@ class MemoAcceptanceTest {
                         fieldWithPath("visibility").description("생성된 메모의 공개 범위 [PUBLIC : 공개, PRIVATE : 비공개]"),
                         fieldWithPath("createdDateTime").description("생성된 메모의 생성 시간"),
                         fieldWithPath("updatedDateTime").description("생성된 메모의 수정 시간")
-                    )
+                    ),
                 )
             )
     }
@@ -99,6 +114,8 @@ class MemoAcceptanceTest {
             .andDo(
                 document(
                     "memos/update",
+                    preprocessRequest(prettyPrint()),
+                    preprocessResponse(prettyPrint()),
                     requestHeaders(
                         headerWithName("Authorization").description("스트리머 토큰")
                     ),
@@ -153,6 +170,8 @@ class MemoAcceptanceTest {
             .andDo(
                 document(
                     "memos/get_by_id",
+                    preprocessRequest(prettyPrint()),
+                    preprocessResponse(prettyPrint()),
                     pathParameters(
                         parameterWithName("memoId").description("조회할 메모의 ID")
                     ),
@@ -163,8 +182,8 @@ class MemoAcceptanceTest {
                         fieldWithPath("visibility").description("조회된 메모의 공개 범위 [PUBLIC : 공개, PRIVATE : 비공개]"),
                         fieldWithPath("createdDateTime").description("조회된 메모의 생성 시간"),
                         fieldWithPath("updatedDateTime").description("조회된 메모의 수정 시간")
-                    )
-                )
+                    ),
+                ),
             )
     }
 
@@ -216,19 +235,27 @@ class MemoAcceptanceTest {
             .andDo(
                 document(
                     "memos/get_page",
+                    preprocessRequest(prettyPrint()),
+                    preprocessResponse(prettyPrint()),
                     queryParameters(
                         parameterWithName("pageSize").description("조회할 메모의 개수"),
                         parameterWithName("lastCursorId").description("조회할 메모리스트의 마지막 메모 ID"),
-                        parameterWithName("streamerId").description("메모리스트를 조회할 스트리머 ID").optional()
+                        parameterWithName("streamerId").optional().description("메모리스트를 조회할 스트리머 ID")
                     ),
                     responseFields(
                         fieldWithPath("data").description("조회된 메모의 목록"),
-                        fieldWithPath("data[].memoId").description("조회된 메모의 ID"),
-                        fieldWithPath("data[].content").description("조회된 메모의 내용"),
-                        fieldWithPath("data[].writerId").description("조회된 메모의 작성자 ID"),
-                        fieldWithPath("data[].visibility").description("조회된 메모의 공개 범위 [PUBLIC : 공개, PRIVATE : 비공개]"),
-                        fieldWithPath("data[].createdDateTime").description("조회된 메모의 생성 시간"),
-                        fieldWithPath("data[].updatedDateTime").description("조회된 메모의 수정 시간"),
+                        fieldWithPath("data[].memoId").type(JsonFieldType.NUMBER)
+                            .description("조회된 메모의 ID"),
+                        fieldWithPath("data[].content").type(JsonFieldType.STRING)
+                            .description("조회된 메모의 내용"),
+                        fieldWithPath("data[].writerId").type(JsonFieldType.NUMBER)
+                            .description("조회된 메모의 작성자 ID"),
+                        fieldWithPath("data[].visibility").type(JsonFieldType.STRING)
+                            .description("조회된 메모의 공개 범위 [PUBLIC : 공개, PRIVATE : 비공개]"),
+                        fieldWithPath("data[].createdDateTime").type(JsonFieldType.STRING)
+                            .description("조회된 메모의 생성 시간"),
+                        fieldWithPath("data[].updatedDateTime").type(JsonFieldType.STRING)
+                            .description("조회된 메모의 수정 시간"),
                         fieldWithPath("hasNext").description("다음 페이지가 있는지 여부 : 페이지 크기가 pageSize와 같으면 true"),
                         fieldWithPath("nextCursorId").description("다음 페이지의 시작 ID"),
                         fieldWithPath("isEmpty").description("조회된 메모가 없는지 여부")
