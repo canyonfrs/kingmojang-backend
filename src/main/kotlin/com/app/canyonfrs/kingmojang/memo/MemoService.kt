@@ -31,6 +31,7 @@ class MemoServiceImpl(
     override fun updateMemo(member: Member, memoId: Long, request: MemoRequest): MemoResponse {
         val memo = memoRepository.findById(memoId)
             .orElseThrow { throw IllegalArgumentException("요청한 메모가 존재하지 않습니다.") }
+
         memo.update(member, request.content, request.visibility)
 
         return MemoResponse.from(memo)

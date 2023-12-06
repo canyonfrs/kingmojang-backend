@@ -217,7 +217,7 @@ class MemoAcceptanceTest {
                 .contentType("application/json")
                 .queryParam("pageSize", "20")
                 .queryParam("lastCursorId", Long.MAX_VALUE.toString())
-                .queryParam("streamerId", "1")
+                .queryParam("streamerId", "2")
         )
             .andExpect(status().isOk)
             .andExpect {
