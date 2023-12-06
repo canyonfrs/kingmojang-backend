@@ -1,15 +1,12 @@
 spring:
-  jpa:
-    properties:
-      hibernate:
-        show_sql: true
-        format_sql: true
-        use_sql_comments: true
-    open-in-view: false
-    defer-datasource-initialization: true
-    hibernate:
-      ddl-auto: create-drop
+  profiles:
+    default: dev
 
-  sql:
-    init:
-      mode: always
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: none
+
+  docker:
+    compose:
+      enabled: false
