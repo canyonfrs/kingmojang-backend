@@ -5,18 +5,28 @@ import com.app.canyonfrs.kingmojang.common.BaseEntity
 import com.app.canyonfrs.kingmojang.memo.Memo
 import com.app.canyonfrs.kingmojang.memo.Visibility
 import jakarta.persistence.*
+import org.hibernate.annotations.Comment
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
 
 @Entity
 data class Member(
+    @Comment("사용자 이메일")
+    @Column(length = 254)
     var email: String,
+    @Comment("사용자 이름 혹은 닉네임")
+    @Column(length = 30)
     var name: String,
-    // TODO: 시청자가 생기면 어떻게 다룰건지 고민하기(getPassword)
+    @Comment("사용자 고유 토큰. 현재 비밀번호처럼 사용중")
+    @Column(length = 255, unique = true)
     var token: String,
+    @Comment("사용자 전화번호. xxx-xxxx-xxxx 형식")
+    @Column(length = 13)
     var phoneNumber: String? = null,
+    @Comment("사용자 활성화 여부")
     @Enumerated(EnumType.STRING)
+    @Column(length = 10)
     var role: Role,
 
     @Id
