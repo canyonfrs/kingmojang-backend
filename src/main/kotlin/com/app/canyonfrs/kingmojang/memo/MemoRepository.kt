@@ -25,7 +25,7 @@ class MemoCustomRepositoryImpl(
         if (memoCursorPageCondition.streamerId != null) {
             sql += " AND writer_id = :writerId"
         }
-        sql += " ORDER BY created_date_time DESC LIMIT :pageSize"
+        sql += " ORDER BY id DESC LIMIT :pageSize"
 
         var client = jdbcClient.sql(sql)
             .param("lastCursorId", memoCursorPageCondition.lastCursorId)
