@@ -8,7 +8,7 @@ class MemoFixture {
             content: String = randomString(10),
             writerId: Long = 1L,
             visibility: Visibility = Visibility.PUBLIC,
-            id: Long? = 1L
+            id: Long? = null
         ): Memo {
             return Memo(
                 content = content,
