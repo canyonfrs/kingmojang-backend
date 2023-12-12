@@ -24,3 +24,7 @@ spring:
   sql:
     init:
       mode: always
+
+logging:
+  level:
+    root: info

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <property name="LOG_PATTERN" value="[%d{yyyy-MM-dd HH:mm:ss}:%-4relative] %green([%thread]) %highlight(%-5level) %boldWhite([%C.%M:%yellow(%L)]) - %msg%n"/>
+
+    <springProfile name="prod">
+        <propery resource="application-prod.yml" />
+        <root level="info">
+            <appender-ref ref="STDOUT" />
+        </root>
+        <logger name="org.springframework" level="debug">
+            <appender-ref ref="FILE" />
+        </logger>
+    </springProfile>
+
+    <springProfile name="dev">
+        <propery resource="application-dev.yml" />
+        <root level="debug">
+            <appender-ref ref="STDOUT" />
+        </root>
+        <logger name="org.springframework" level="debug">
+            <appender-ref ref="FILE" />
+        </logger>
+    </springProfile>
+
+    <springProfile name="test">
+        <propery resource="application-test.yml" />
+        <root level="info">
+            <appender-ref ref="STDOUT" />
+        </root>
+    </springProfile>
+
+    <springProperty name="LOG_FILE_NAME" source= "log.config.filename" />
+    <springProperty name="LOG_MAX_HISTORY" source= "log.config.maxHistory" />
+    <springProperty name="LOG_MAX_FILE_SIZE" source= "log.config.maxFileSize" />
+    <springProperty name="LOG_TOTAL_SIZE_CAP" source= "log.config.totalSizeCap" />
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>./logs/${LOG_FILE_NAME}.log</file>
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>./logs/${LOG_FILE_NAME}.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <maxFileSize>${LOG_MAX_FILE_SIZE}</maxFileSize>
+            <maxHistory>${LOG_MAX_HISTORY}</maxHistory>
+            <totalSizeCap>${LOG_TOTAL_SIZE_CAP}</totalSizeCap>
+        </rollingPolicy>
+    </appender>
+
+</configuration>
