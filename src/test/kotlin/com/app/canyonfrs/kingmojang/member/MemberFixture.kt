@@ -14,7 +14,7 @@ class MemberFixture {
                 )
             }-${RandomGenerator.randomString(4)}",
             role: Role = Role.STREAMER,
-            id: Long? = 1L,
+            id: Long? = null,
         ): Member {
 
             return Member(
