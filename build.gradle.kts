@@ -21,6 +21,7 @@ repositories {
 }
 
 val snippetsDir by extra { file("build/generated-snippets") }
+val kotestVersion = "5.8.0"
 
 dependencies {
     // web
@@ -42,6 +43,10 @@ dependencies {
 
     // test
     testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("io.mockk:mockk:1.13.7")
+    testImplementation("io.kotest:kotest-runner-junit5:$kotestVersion")
+    testImplementation("io.kotest:kotest-assertions-core:$kotestVersion")
+    testImplementation("com.ninja-squad:springmockk:4.0.2")
 
     // docs
 //    asciidoctor("org.springframework.restdocs:spring-restdocs-asciidoctor")
