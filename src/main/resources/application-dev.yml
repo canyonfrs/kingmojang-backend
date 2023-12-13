@@ -23,3 +23,14 @@ spring:
   docker:
     compose:
       enabled: true
+
+logging:
+  level:
+    root: debug
+
+log:
+  config:
+    filename: app-dev
+    maxHistory: 7
+    maxFileSize: 50MB
+    totalSizeCap: 1GB
