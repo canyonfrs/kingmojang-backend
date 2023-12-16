@@ -28,10 +28,10 @@ class MemberController(
     @GetMapping("/api/v1/members/validate-verification-code")
     fun getMember(
         @RequestHeader("Authorization") bearerToken: String,
-    ): ResponseEntity<Void> {
-        memberService.validateVerificationCode(verificationCode(bearerToken))
+    ): ResponseEntity<MemberResponse> {
+        val response = memberService.validateVerificationCode(verificationCode(bearerToken))
 
-        return ResponseEntity.ok().build()
+        return ResponseEntity.ok().body(response)
     }
 
     private fun verificationCode(token: String): String {

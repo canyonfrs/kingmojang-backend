@@ -23,12 +23,14 @@ class MemberService(
         return MemberResponse.of(newMember)
     }
 
-    fun validateVerificationCode(token: String) {
+    fun validateVerificationCode(token: String): MemberResponse {
 
         val member = memberRepository.findByToken(token) ?: throw BusinessException(INVALID_VERIFICATION_CODE)
 
         if (member.activeStatus != ActiveStatus.ACTIVE) {
             throw BusinessException(INVALID_MEMBER_STATUS)
         }
+
+        return MemberResponse.of(member)
     }
 }
