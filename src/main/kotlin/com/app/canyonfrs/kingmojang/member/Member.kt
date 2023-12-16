@@ -2,6 +2,7 @@ package com.app.canyonfrs.kingmojang.member
 
 import com.app.canyonfrs.kingmojang.common.ActiveStatus
 import com.app.canyonfrs.kingmojang.common.BaseEntity
+import com.app.canyonfrs.kingmojang.member.TokenGeneratorImpl.Companion.TOKEN_LENGTH
 import com.app.canyonfrs.kingmojang.memo.Memo
 import com.app.canyonfrs.kingmojang.memo.Visibility
 import jakarta.persistence.*
@@ -19,7 +20,7 @@ data class Member(
     @Column(length = 30)
     var name: String,
     @Comment("사용자 고유 토큰. 현재 비밀번호처럼 사용중")
-    @Column(length = 255, unique = true)
+    @Column(length = TOKEN_LENGTH, unique = true)
     var token: String,
     @Comment("사용자 전화번호. xxx-xxxx-xxxx 형식")
     @Column(length = 13)
@@ -43,6 +44,36 @@ data class Member(
             content = "",
             writerId = this.id!!,
             visibility = Visibility.PUBLIC,
+        )
+    }
+
+    fun createMember(memberRequest: MemberRequest, tokenGenerator: TokenGenerator): Member {
+        return createMember(
+            memberRequest.email,
+            memberRequest.name,
+            memberRequest.phoneNumber,
+            memberRequest.role,
+            tokenGenerator
+        )
+    }
+
+    fun createMember(
+        email: String,
+        name: String,
+        phoneNumber: String?,
+        role: Role,
+        tokenGenerator: TokenGenerator
+    ): Member {
+        if (this.role.name != "ADMIN") {
+            throw IllegalArgumentException("회원 생성은 관리자만 가능합니다.")
+        }
+
+        return Member(
+            email = email,
+            name = name,
+            token = tokenGenerator.generateToken(),
+            phoneNumber = phoneNumber,
+            role = role,
         )
     }
 

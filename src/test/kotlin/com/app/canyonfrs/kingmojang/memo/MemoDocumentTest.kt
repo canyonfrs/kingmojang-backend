@@ -1,7 +1,7 @@
 package com.app.canyonfrs.kingmojang.memo
 
 import com.app.canyonfrs.kingmojang.member.MemberFixture.Companion.aMember
-import com.app.canyonfrs.kingmojang.utils.WithMockCustomStreamer
+import com.app.canyonfrs.kingmojang.utils.WithMockStreamerMember
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.every
 import org.junit.jupiter.api.Test
@@ -15,8 +15,7 @@ import org.springframework.restdocs.operation.preprocess.Preprocessors
 import org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest
 import org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse
 import org.springframework.restdocs.payload.JsonFieldType
-import org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath
-import org.springframework.restdocs.payload.PayloadDocumentation.responseFields
+import org.springframework.restdocs.payload.PayloadDocumentation.*
 import org.springframework.restdocs.request.RequestDocumentation
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf
 import org.springframework.test.web.servlet.MockMvc
@@ -38,7 +37,7 @@ class MemoDocumentTest {
     }
 
     @Test
-    @WithMockCustomStreamer
+    @WithMockStreamerMember
     fun `POST memo 201 created document`() {
         val response = MemoResponse(
             memoId = 1L,
@@ -82,7 +81,7 @@ class MemoDocumentTest {
     }
 
     @Test
-    @WithMockCustomStreamer
+    @WithMockStreamerMember
     fun `PUT memo 200 ok document`() {
         val request = """
             {
@@ -118,6 +117,10 @@ class MemoDocumentTest {
                     requestHeaders(
                         headerWithName("Authorization").description("스트리머 토큰")
                     ),
+                    requestFields(
+                        fieldWithPath("content").description("수정할 메모의 내용"),
+                        fieldWithPath("visibility").description("수정할 메모의 공개 범위 [PUBLIC : 공개, PRIVATE : 비공개]")
+                    ),
                     responseFields(
                         fieldWithPath("memoId").description("수정된 메모의 ID"),
                         fieldWithPath("content").description("수정된 메모의 내용"),
@@ -131,7 +134,7 @@ class MemoDocumentTest {
     }
 
     @Test
-    @WithMockCustomStreamer
+    @WithMockStreamerMember
     fun `GET memo 200 ok document`() {
         val response = MemoResponse(
             memoId = 1L,
@@ -172,7 +175,7 @@ class MemoDocumentTest {
     }
 
     @Test
-    @WithMockCustomStreamer
+    @WithMockStreamerMember
     fun `GET memos 200 ok document`() {
         val response = MemoCursorPageResponse(
             data = listOf(

@@ -26,5 +26,23 @@ class MemberFixture {
                 id = id
             )
         }
+
+        fun aMemberRequest(
+            email: String = "${RandomGenerator.randomString(10)}@gmail.com",
+            name: String = RandomGenerator.randomString(10),
+            phoneNumber: String? = "${RandomGenerator.randomString(3)}-${
+                RandomGenerator.randomString(
+                    4
+                )
+            }-${RandomGenerator.randomString(4)}",
+            role: Role = Role.STREAMER,
+        ): MemberRequest {
+           return MemberRequest(
+               email = email,
+               name = name,
+               phoneNumber = phoneNumber,
+               role = role,
+           )
+        }
     }
 }

@@ -1,10 +1,8 @@
 package com.app.canyonfrs.kingmojang.memo
 
-import com.app.canyonfrs.kingmojang.common.BaseCursorPageResponse
 import com.app.canyonfrs.kingmojang.member.Member
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
-import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.bind.annotation.*
 import java.net.URI
 
