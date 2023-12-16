@@ -1,7 +1,7 @@
 package com.app.canyonfrs.kingmojang.memo
 
 import com.app.canyonfrs.kingmojang.member.MemberFixture.Companion.aMember
-import com.app.canyonfrs.kingmojang.utils.WithMockCustomStreamer
+import com.app.canyonfrs.kingmojang.utils.WithMockStreamerMember
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.every
 import org.junit.jupiter.api.Test
@@ -38,7 +38,7 @@ class MemoDocumentTest {
     }
 
     @Test
-    @WithMockCustomStreamer
+    @WithMockStreamerMember
     fun `POST memo 201 created document`() {
         val response = MemoResponse(
             memoId = 1L,
@@ -82,7 +82,7 @@ class MemoDocumentTest {
     }
 
     @Test
-    @WithMockCustomStreamer
+    @WithMockStreamerMember
     fun `PUT memo 200 ok document`() {
         val request = """
             {
@@ -131,7 +131,7 @@ class MemoDocumentTest {
     }
 
     @Test
-    @WithMockCustomStreamer
+    @WithMockStreamerMember
     fun `GET memo 200 ok document`() {
         val response = MemoResponse(
             memoId = 1L,
@@ -172,7 +172,7 @@ class MemoDocumentTest {
     }
 
     @Test
-    @WithMockCustomStreamer
+    @WithMockStreamerMember
     fun `GET memos 200 ok document`() {
         val response = MemoCursorPageResponse(
             data = listOf(
