@@ -57,7 +57,7 @@ class MemberDocumentTest {
             .andDo(log())
             .andDo(
                 document(
-                    "member-create",
+                    "members/create",
                     requestFields(
                         fieldWithPath("name").description("생성할 회원의 이름 / 닉네임"),
                         fieldWithPath("email").description("생성할 회원의 이메일"),
