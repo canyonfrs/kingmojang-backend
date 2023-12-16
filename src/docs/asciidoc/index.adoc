@@ -102,3 +102,17 @@ include::{snippets}/members/create/request-fields.adoc[]
 
 ==== 회원 생성 응답 필드
 include::{snippets}/members/create/response-fields.adoc[]
+
+=== 인증 코드 유효성 확인 API
+인증 코드 유효성을 확인하는 API
+- 유효한 인증코드면 200 / 아니면 401을 반환한다.
+
+==== 인증 코드 유효성 확인 요청 샘플
+include::{snippets}/members/validate-verification-code/http-request.adoc[]
+
+==== 인증 코드 유효성 확인 CURL 샘플
+include::{snippets}/members/validate-verification-code/curl-request.adoc[]
+
+==== 인증 코드 유효성 확인 응답 필드
+include::{snippets}/members/validate-verification-code/response-fields.adoc[]
+
