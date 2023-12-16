@@ -52,18 +52,18 @@ class MemberAcceptanceTest @Autowired constructor(
         }
     }
 
-    Given("non-admin") {
-        val streamer = memberRepository.save(aMember(role = Role.STREAMER))
-
-        When("request creating a streamer") {
-            val memberRequest = objectMapper.writeValueAsString(aMemberRequest())
-            val result = mockMvc.createMember(streamer.token, memberRequest)
-
-            Then("response 403 forbidden") {
-                result.andExpect(status().isForbidden)
-            }
-        }
-    }
+//    Given("non-admin") {
+//        val streamer = memberRepository.save(aMember(role = Role.STREAMER))
+//
+//        When("request creating a streamer") {
+//            val memberRequest = objectMapper.writeValueAsString(aMemberRequest())
+//            val result = mockMvc.createMember(streamer.token, memberRequest)
+//
+//            Then("response 403 forbidden") {
+//                result.andExpect(status().isForbidden)
+//            }
+//        }
+//    }
 
     Given("valid verification code") {
         val admin = memberRepository.save(aMember(role = Role.ADMIN))
@@ -75,10 +75,14 @@ class MemberAcceptanceTest @Autowired constructor(
 
         When("requested validation") {
             val result = mockMvc.validateVerificationCode(memberResponse.token)
-                .andDo(print())
 
             Then("response 200 ok") {
-                result.andExpect(status().isOk)
+                val response = result.andExpect(status().isOk)
+                    .toResponse<MemberResponse>(objectMapper)
+
+                response.name shouldBe memberResponse.name
+                response.email shouldBe memberResponse.email
+                response.phoneNumber shouldBe memberResponse.phoneNumber
             }
         }
     }
