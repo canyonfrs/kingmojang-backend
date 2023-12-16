@@ -10,6 +10,7 @@ import io.kotest.matchers.shouldBe
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.test.web.servlet.MockMvc
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers.print
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.header
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
@@ -51,16 +52,44 @@ class MemberAcceptanceTest @Autowired constructor(
         }
     }
 
-//    Given("non-admin") {
-//        val streamer = memberRepository.save(aMember(role = Role.STREAMER))
-//
-//        When("request creating a streamer") {
-//            val memberRequest = objectMapper.writeValueAsString(aMemberRequest())
-//            val result = mockMvc.createMember(streamer.token, memberRequest)
-//
-//            Then("response 403 forbidden") {
-//                result.andExpect(status().isForbidden)
-//            }
-//        }
-//    }
+    Given("non-admin") {
+        val streamer = memberRepository.save(aMember(role = Role.STREAMER))
+
+        When("request creating a streamer") {
+            val memberRequest = objectMapper.writeValueAsString(aMemberRequest())
+            val result = mockMvc.createMember(streamer.token, memberRequest)
+
+            Then("response 403 forbidden") {
+                result.andExpect(status().isForbidden)
+            }
+        }
+    }
+
+    Given("valid verification code") {
+        val admin = memberRepository.save(aMember(role = Role.ADMIN))
+
+        val memberResponse = mockMvc.createMember(admin.token, objectMapper.writeValueAsString(aMemberRequest()))
+            .andExpect(status().isCreated)
+            .andExpect(header().exists("Location"))
+            .toResponse<MemberResponse>(objectMapper)
+
+        When("requested validation") {
+            val result = mockMvc.validateVerificationCode(memberResponse.token)
+                .andDo(print())
+
+            Then("response 200 ok") {
+                result.andExpect(status().isOk)
+            }
+        }
+    }
+
+    Given("unvalidated verification code") {
+        When("requested validation") {
+            val result = mockMvc.validateVerificationCode("invalid_token")
+
+            Then("response 401 unauthorized") {
+                result.andExpect(status().isUnauthorized)
+            }
+        }
+    }
 })

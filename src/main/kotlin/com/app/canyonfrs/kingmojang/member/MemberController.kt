@@ -2,8 +2,10 @@ package com.app.canyonfrs.kingmojang.member
 
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
+import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RestController
 import java.net.URI
 
@@ -21,5 +23,18 @@ class MemberController(
         val response = memberService.createMember(requester, memberRequest)
 
         return ResponseEntity.created(URI("/api/v1/members/${response.id}")).body(response)
+    }
+
+    @GetMapping("/api/v1/members/validate-verification-code")
+    fun getMember(
+        @RequestHeader("Authorization") bearerToken: String,
+    ): ResponseEntity<Void> {
+        memberService.validateVerificationCode(verificationCode(bearerToken))
+
+        return ResponseEntity.ok().build()
+    }
+
+    private fun verificationCode(token: String): String {
+        return token.split(" ")[1]
     }
 }

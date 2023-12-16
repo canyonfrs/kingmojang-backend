@@ -5,7 +5,6 @@ import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.context.SecurityContextHolder
-import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.stereotype.Component
 import org.springframework.web.filter.OncePerRequestFilter
@@ -30,12 +29,12 @@ class TokenAuthenticationFilter(
         val token = authHeader.substring(7)
 
         if (token != null && SecurityContextHolder.getContext().authentication == null) {
-            val userDetails = userDetailsService.loadUserByUsername(token)
+            val userDetails = userDetailsService.loadUserByUsername(token) ?: null
 
             val authToken = UsernamePasswordAuthenticationToken(
                 userDetails,
                 null,
-                userDetails.authorities
+                userDetails?.authorities
             )
 
             SecurityContextHolder.getContext().authentication = authToken
