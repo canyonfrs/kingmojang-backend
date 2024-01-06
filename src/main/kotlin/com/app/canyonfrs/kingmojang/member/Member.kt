@@ -3,8 +3,8 @@ package com.app.canyonfrs.kingmojang.member
 import com.app.canyonfrs.kingmojang.common.ActiveStatus
 import com.app.canyonfrs.kingmojang.common.BaseEntity
 import com.app.canyonfrs.kingmojang.member.TokenGeneratorImpl.Companion.TOKEN_LENGTH
-import com.app.canyonfrs.kingmojang.memo.Memo
-import com.app.canyonfrs.kingmojang.memo.Visibility
+import com.app.canyonfrs.kingmojang.memopad.MemoPad
+import com.app.canyonfrs.kingmojang.memopad.Visibility
 import jakarta.persistence.*
 import org.hibernate.annotations.Comment
 import org.springframework.security.core.GrantedAuthority
@@ -35,12 +35,12 @@ data class Member(
     var id: Long? = null,
 ) : BaseEntity(), UserDetails {
 
-    fun createEmptyMemo(): Memo {
+    fun createEmptyMemo(): MemoPad {
         if (role.name != "STREAMER") {
             throw IllegalArgumentException("메모 생성은 스트리머만 가능합니다.")
         }
 
-        return Memo(
+        return MemoPad(
             content = "",
             writerId = this.id!!,
             visibility = Visibility.PUBLIC,

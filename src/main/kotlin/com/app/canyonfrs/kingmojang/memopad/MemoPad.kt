@@ -1,4 +1,4 @@
-package com.app.canyonfrs.kingmojang.memo
+package com.app.canyonfrs.kingmojang.memopad
 
 import com.app.canyonfrs.kingmojang.common.BaseEntity
 import com.app.canyonfrs.kingmojang.member.Member
@@ -6,7 +6,7 @@ import jakarta.persistence.*
 import org.hibernate.annotations.Comment
 
 @Entity
-class Memo(
+class MemoPad(
     @Comment("메모 내용")
     @Column(columnDefinition = "TEXT")
     var content: String,

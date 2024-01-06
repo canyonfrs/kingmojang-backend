@@ -1,6 +1,6 @@
-package com.app.canyonfrs.kingmojang.memo
+package com.app.canyonfrs.kingmojang.memopad
 
-data class MemoCursorPageCondition(
+data class MemoPadCursorPageCondition(
     val lastCursorId: Long,
     val pageSize: Int,
     val streamerId: Long? = null,
@@ -11,8 +11,8 @@ data class MemoCursorPageCondition(
             lastCursorId: Long,
             pageSize: Int,
             memberId: Long? = null,
-        ): MemoCursorPageCondition {
-            return MemoCursorPageCondition(
+        ): MemoPadCursorPageCondition {
+            return MemoPadCursorPageCondition(
                 lastCursorId = lastCursorId,
                 pageSize = pageSize,
                 streamerId = memberId,

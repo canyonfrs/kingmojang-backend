@@ -1,16 +1,16 @@
-package com.app.canyonfrs.kingmojang.memo
+package com.app.canyonfrs.kingmojang.memopad
 
 import com.app.canyonfrs.kingmojang.utils.RandomGenerator.Companion.randomString
 
-class MemoFixture {
+class MemoPadFixture {
     companion object {
-        fun aMemo(
+        fun aMemoPad(
             content: String = randomString(10),
             writerId: Long = 1L,
             visibility: Visibility = Visibility.PUBLIC,
             id: Long? = null
-        ): Memo {
-            return Memo(
+        ): MemoPad {
+            return MemoPad(
                 content = content,
                 writerId = writerId,
                 visibility = visibility,
@@ -18,14 +18,14 @@ class MemoFixture {
             )
         }
 
-        fun memos(
+        fun memoPads(
             size: Int = 20,
             writerId: Long = 1L,
             visibility: Visibility = Visibility.PUBLIC,
-        ): List<Memo> {
+        ): List<MemoPad> {
 
             return (1..size).map {
-                aMemo(
+                aMemoPad(
                     writerId = writerId,
                     visibility = visibility,
                     id = null

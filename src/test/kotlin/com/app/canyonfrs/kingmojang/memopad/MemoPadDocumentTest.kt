@@ -1,4 +1,4 @@
-package com.app.canyonfrs.kingmojang.memo
+package com.app.canyonfrs.kingmojang.memopad
 
 import com.app.canyonfrs.kingmojang.member.MemberFixture.Companion.aMember
 import com.app.canyonfrs.kingmojang.utils.WithMockStreamerMember
@@ -23,13 +23,13 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 import java.time.LocalDateTime
 
-@WebMvcTest(controllers = [MemoController::class])
+@WebMvcTest(controllers = [MemoPadController::class])
 @AutoConfigureRestDocs
-class MemoDocumentTest {
+class MemoPadDocumentTest {
     @Autowired
     private lateinit var mockMvc: MockMvc
     @MockkBean
-    private lateinit var memoService: MemoService
+    private lateinit var memoPadService: MemoPadService
 
     companion object {
         const val TEST_STREAMER_TOKEN = "streamer_token"
@@ -38,9 +38,9 @@ class MemoDocumentTest {
 
     @Test
     @WithMockStreamerMember
-    fun `POST memo 201 created document`() {
-        val response = MemoResponse(
-            memoId = 1L,
+    fun `POST memo-pad 201 created document`() {
+        val response = MemoPadResponse(
+            memoPadId = 1L,
             content = "",
             writerId = testStreamer.id!!,
             visibility = Visibility.PUBLIC,
@@ -48,10 +48,10 @@ class MemoDocumentTest {
             updatedDateTime = LocalDateTime.now()
         )
 
-        every { memoService.createMemo(any()) } returns response
+        every { memoPadService.createMemo(any()) } returns response
 
         mockMvc.perform(
-            MockMvcRequestBuilders.post("/api/v1/memos")
+            MockMvcRequestBuilders.post("/api/v1/memo-pads")
                 .header("Authorization", "Bearer $TEST_STREAMER_TOKEN")
                 .contentType("application/json")
                 .with(csrf().asHeader())
@@ -59,7 +59,7 @@ class MemoDocumentTest {
             .andExpect(MockMvcResultMatchers.status().isCreated)
             .andDo(
                 MockMvcRestDocumentation.document(
-                    "memos/create",
+                    "memo-pads/create",
                     preprocessRequest(Preprocessors.prettyPrint()),
                     preprocessResponse(Preprocessors.prettyPrint()),
                     requestHeaders(
@@ -69,7 +69,7 @@ class MemoDocumentTest {
                         headerWithName("Location").description("생성된 메모의 URI")
                     ),
                     responseFields(
-                        fieldWithPath("memoId").description("생성된 메모의 ID"),
+                        fieldWithPath("memoPadId").description("생성된 메모의 ID"),
                         fieldWithPath("content").description("생성된 메모의 내용"),
                         fieldWithPath("writerId").description("생성된 메모의 작성자 ID"),
                         fieldWithPath("visibility").description("생성된 메모의 공개 범위 [PUBLIC : 공개, PRIVATE : 비공개]"),
@@ -82,7 +82,7 @@ class MemoDocumentTest {
 
     @Test
     @WithMockStreamerMember
-    fun `PUT memo 200 ok document`() {
+    fun `PUT memo-pad 200 ok document`() {
         val request = """
             {
                 "content": "수정된 메모",
@@ -90,8 +90,8 @@ class MemoDocumentTest {
             }
         """.trimIndent()
 
-        val response = MemoResponse(
-            memoId = 1L,
+        val response = MemoPadResponse(
+            memoPadId = 1L,
             content = "수정된 메모",
             writerId = testStreamer.id!!,
             visibility = Visibility.PUBLIC,
@@ -99,10 +99,10 @@ class MemoDocumentTest {
             updatedDateTime = LocalDateTime.now()
         )
 
-        every { memoService.updateMemo(any(), 1, any()) } returns response
+        every { memoPadService.updateMemoPad(any(), 1, any()) } returns response
 
         mockMvc.perform(
-            MockMvcRequestBuilders.put("/api/v1/memos/1")
+            MockMvcRequestBuilders.put("/api/v1/memo-pads/1")
                 .header("Authorization", "Bearer $TEST_STREAMER_TOKEN")
                 .content(request)
                 .contentType("application/json")
@@ -111,7 +111,7 @@ class MemoDocumentTest {
             .andExpect(MockMvcResultMatchers.status().isOk)
             .andDo(
                 MockMvcRestDocumentation.document(
-                    "memos/update",
+                    "memo-pads/update",
                     preprocessRequest(Preprocessors.prettyPrint()),
                     preprocessResponse(Preprocessors.prettyPrint()),
                     requestHeaders(
@@ -122,7 +122,7 @@ class MemoDocumentTest {
                         fieldWithPath("visibility").description("수정할 메모의 공개 범위 [PUBLIC : 공개, PRIVATE : 비공개]")
                     ),
                     responseFields(
-                        fieldWithPath("memoId").description("수정된 메모의 ID"),
+                        fieldWithPath("memoPadId").description("수정된 메모의 ID"),
                         fieldWithPath("content").description("수정된 메모의 내용"),
                         fieldWithPath("writerId").description("수정된 메모의 작성자 ID"),
                         fieldWithPath("visibility").description("수정된 메모의 공개 범위 [PUBLIC : 공개, PRIVATE : 비공개]"),
@@ -135,9 +135,9 @@ class MemoDocumentTest {
 
     @Test
     @WithMockStreamerMember
-    fun `GET memo 200 ok document`() {
-        val response = MemoResponse(
-            memoId = 1L,
+    fun `GET memo-pad 200 ok document`() {
+        val response = MemoPadResponse(
+            memoPadId = 1L,
             content = "생성된 메모",
             writerId = testStreamer.id!!,
             visibility = Visibility.PUBLIC,
@@ -145,10 +145,10 @@ class MemoDocumentTest {
             updatedDateTime = LocalDateTime.now()
         )
 
-        every { memoService.getMemo(any()) } returns response
+        every { memoPadService.getMemoPad(any()) } returns response
 
         mockMvc.perform(
-            MockMvcRequestBuilders.get("/api/v1/memos/1")
+            MockMvcRequestBuilders.get("/api/v1/memo-pads/1")
                 .header("Authorization", "Bearer $TEST_STREAMER_TOKEN")
                 .contentType("application/json")
                 .with(csrf().asHeader())
@@ -156,14 +156,14 @@ class MemoDocumentTest {
             .andExpect(MockMvcResultMatchers.status().isOk)
             .andDo(
                 MockMvcRestDocumentation.document(
-                    "memos/get",
+                    "memo-pads/get",
                     preprocessRequest(Preprocessors.prettyPrint()),
                     preprocessResponse(Preprocessors.prettyPrint()),
                     requestHeaders(
                         headerWithName("Authorization").description("스트리머 토큰")
                     ),
                     responseFields(
-                        fieldWithPath("memoId").description("수정된 메모의 ID"),
+                        fieldWithPath("memoPadId").description("수정된 메모의 ID"),
                         fieldWithPath("content").description("수정된 메모의 내용"),
                         fieldWithPath("writerId").description("수정된 메모의 작성자 ID"),
                         fieldWithPath("visibility").description("수정된 메모의 공개 범위 [PUBLIC : 공개, PRIVATE : 비공개]"),
@@ -176,11 +176,11 @@ class MemoDocumentTest {
 
     @Test
     @WithMockStreamerMember
-    fun `GET memos 200 ok document`() {
-        val response = MemoCursorPageResponse(
+    fun `GET memo-pads 200 ok document`() {
+        val response = MemoPadCursorPageResponse(
             data = listOf(
-                MemoResponse(
-                    memoId = 1L,
+                MemoPadResponse(
+                    memoPadId = 1L,
                     content = "생성된 메모",
                     writerId = testStreamer.id!!,
                     visibility = Visibility.PUBLIC,
@@ -193,10 +193,10 @@ class MemoDocumentTest {
             isEmpty = false
         )
 
-        every { memoService.getMemos(any()) } returns response
+        every { memoPadService.getMemoPads(any()) } returns response
 
         mockMvc.perform(
-            RestDocumentationRequestBuilders.get("/api/v1/memos")
+            RestDocumentationRequestBuilders.get("/api/v1/memo-pads")
                 .contentType("application/json")
                 .queryParam("pageSize", "20")
                 .queryParam("lastCursorId", Long.MAX_VALUE.toString())
@@ -205,7 +205,7 @@ class MemoDocumentTest {
             .andExpect(MockMvcResultMatchers.status().isOk)
             .andExpect {
                 MockMvcResultMatchers.jsonPath("$.data").exists()
-                MockMvcResultMatchers.jsonPath("$.data[0].memoId").exists()
+                MockMvcResultMatchers.jsonPath("$.data[0].memoPadId").exists()
                 MockMvcResultMatchers.jsonPath("$.data[0].content").exists()
                 MockMvcResultMatchers.jsonPath("$.data[0].writerId").exists()
                 MockMvcResultMatchers.jsonPath("$.data[0].visibility").exists()
@@ -217,7 +217,7 @@ class MemoDocumentTest {
             }
             .andDo(
                 MockMvcRestDocumentation.document(
-                    "memos/get_page",
+                    "memo-pads/get_page",
                     preprocessRequest(Preprocessors.prettyPrint()),
                     preprocessResponse(Preprocessors.prettyPrint()),
                     RequestDocumentation.queryParameters(
@@ -228,7 +228,7 @@ class MemoDocumentTest {
                     ),
                     responseFields(
                         fieldWithPath("data").description("조회된 메모의 목록"),
-                        fieldWithPath("data[].memoId").type(JsonFieldType.NUMBER)
+                        fieldWithPath("data[].memoPadId").type(JsonFieldType.NUMBER)
                             .description("조회된 메모의 ID"),
                         fieldWithPath("data[].content").type(JsonFieldType.STRING)
                             .description("조회된 메모의 내용"),
