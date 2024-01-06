@@ -7,6 +7,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.NullSource
 import org.junit.jupiter.params.provider.ValueSource
 
 class MemberTest {
@@ -61,10 +62,12 @@ class MemberTest {
         assertThat(request.role).isEqualTo(member.role)
     }
 
-    @Test
-    fun `createMember - pass = phoneNumber validation`() {
+    @ParameterizedTest
+    @NullSource
+    @ValueSource(strings = ["010-0000-0000", ""])
+    fun `createMember - pass = phoneNumber validation`(phoneNumber: String?) {
         val admin = aMember(role = Role.ADMIN)
-        val request = aMemberRequest(phoneNumber = "010-0000-0000")
+        val request = aMemberRequest(phoneNumber = phoneNumber)
 
         val member = admin.createMember(request) { "token" }
 
