@@ -8,11 +8,11 @@ class MemberFixture {
             email: String = "${RandomGenerator.randomString(10)}@gmail.com",
             name: String = RandomGenerator.randomString(10),
             token: String = RandomGenerator.randomString(100),
-            phoneNumber: String? = "${RandomGenerator.randomString(3)}-${
-                RandomGenerator.randomString(
+            phoneNumber: String? = "${RandomGenerator.randomDigit(3)}-${
+                RandomGenerator.randomDigit(
                     4
                 )
-            }-${RandomGenerator.randomString(4)}",
+            }-${RandomGenerator.randomDigit(4)}",
             role: Role = Role.STREAMER,
             id: Long? = null,
         ): Member {
@@ -29,12 +29,12 @@ class MemberFixture {
 
         fun aMemberRequest(
             email: String = "${RandomGenerator.randomString(10)}@gmail.com",
-            name: String = RandomGenerator.randomString(10),
-            phoneNumber: String? = "${RandomGenerator.randomString(3)}-${
-                RandomGenerator.randomString(
+            name: String = RandomGenerator.randomDigit(10),
+            phoneNumber: String? = "${RandomGenerator.randomDigit(3)}-${
+                RandomGenerator.randomDigit(
                     4
                 )
-            }-${RandomGenerator.randomString(4)}",
+            }-${RandomGenerator.randomDigit(4)}",
             role: Role = Role.STREAMER,
         ): MemberRequest {
            return MemberRequest(

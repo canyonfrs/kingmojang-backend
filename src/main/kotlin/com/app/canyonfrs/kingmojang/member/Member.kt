@@ -14,7 +14,7 @@ import org.springframework.security.core.userdetails.UserDetails
 @Entity
 data class Member(
     @Comment("사용자 이메일")
-    @Column(length = 254)
+    @Column(length = 254, nullable = false, unique = true)
     var email: String,
     @Comment("사용자 이름 혹은 닉네임")
     @Column(length = 30)
@@ -64,6 +64,14 @@ data class Member(
         role: Role,
         tokenGenerator: TokenGenerator
     ): Member {
+        if (!isValidEmail(email)) {
+            throw IllegalArgumentException("이메일 형식이 올바르지 않습니다. 입력받은 이메일: $email")
+        }
+
+        if (!isValidPhoneNumber(phoneNumber)) {
+            throw IllegalArgumentException("전화번호 형식이 올바르지 않습니다. 입력받은 전화번호: $phoneNumber")
+        }
+
         if (this.role.name != "ADMIN") {
             throw IllegalArgumentException("회원 생성은 관리자만 가능합니다.")
         }
@@ -75,6 +83,18 @@ data class Member(
             phoneNumber = phoneNumber,
             role = role,
         )
+    }
+
+    private fun isValidEmail(email: String): Boolean {
+        val emailRegex = "^[A-Za-z0-9](.*)([@]{1})(.{1,})(\\.)(.{1,})$"
+        return email.matches(emailRegex.toRegex())
+    }
+
+    private fun isValidPhoneNumber(phoneNumber: String?): Boolean {
+        if (phoneNumber.isNullOrBlank()) return true;
+
+        val phoneNumberRegex = "^\\d{3}-\\d{3,4}-\\d{4}$"
+        return phoneNumber.matches(phoneNumberRegex.toRegex())
     }
 
 
