@@ -68,6 +68,10 @@ data class Member(
             throw IllegalArgumentException("이메일 형식이 올바르지 않습니다. 입력받은 이메일: $email")
         }
 
+        if (!isValidPhoneNumber(phoneNumber)) {
+            throw IllegalArgumentException("전화번호 형식이 올바르지 않습니다. 입력받은 전화번호: $phoneNumber")
+        }
+
         if (this.role.name != "ADMIN") {
             throw IllegalArgumentException("회원 생성은 관리자만 가능합니다.")
         }
@@ -82,8 +86,15 @@ data class Member(
     }
 
     private fun isValidEmail(email: String): Boolean {
-        val emailRegex = "^[A-Za-z](.*)([@]{1})(.{1,})(\\.)(.{1,})$"
+        val emailRegex = "^[A-Za-z0-9](.*)([@]{1})(.{1,})(\\.)(.{1,})$"
         return email.matches(emailRegex.toRegex())
+    }
+
+    private fun isValidPhoneNumber(phoneNumber: String?): Boolean {
+        if (phoneNumber.isNullOrBlank()) return true;
+
+        val phoneNumberRegex = "^\\d{3}-\\d{3,4}-\\d{4}$"
+        return phoneNumber.matches(phoneNumberRegex.toRegex())
     }
 
 
