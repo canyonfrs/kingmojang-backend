@@ -6,6 +6,8 @@ import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.ValueSource
 
 class MemberTest {
     @Test
@@ -43,5 +45,16 @@ class MemberTest {
         assertThat(request.email).isEqualTo(member.email)
         assertThat(request.phoneNumber).isEqualTo(member.phoneNumber)
         assertThat(request.role).isEqualTo(member.role)
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = ["tester@test", "", "tester", "tester@"])
+    fun `createMember - fail = email pattern wrong`(email: String) {
+        val admin = aMember(role = Role.ADMIN)
+        val request = aMemberRequest(email = email)
+
+        assertThatThrownBy { admin.createMember(request) { "token" } }
+            .isInstanceOf(IllegalArgumentException::class.java)
+            .hasMessageContaining("이메일 형식이 올바르지 않습니다.")
     }
 }
