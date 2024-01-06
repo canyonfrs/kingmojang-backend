@@ -48,6 +48,34 @@ class MemberTest {
     }
 
     @ParameterizedTest
+    @ValueSource(strings = ["kskyung0624@gmail.com", "wer@sdf.com", "wer@hanmail.net"])
+    fun `createMember - pass = email validation`(email: String) {
+        val admin = aMember(role = Role.ADMIN)
+        val request = aMemberRequest(email = email)
+
+        val member = admin.createMember(request) { "token" }
+
+        assertThat(request.name).isEqualTo(member.name)
+        assertThat(request.email).isEqualTo(member.email)
+        assertThat(request.phoneNumber).isEqualTo(member.phoneNumber)
+        assertThat(request.role).isEqualTo(member.role)
+    }
+
+    @Test
+    fun `createMember - pass = phoneNumber validation`() {
+        val admin = aMember(role = Role.ADMIN)
+        val request = aMemberRequest(phoneNumber = "010-0000-0000")
+
+        val member = admin.createMember(request) { "token" }
+
+        assertThat(request.name).isEqualTo(member.name)
+        assertThat(request.email).isEqualTo(member.email)
+        assertThat(request.phoneNumber).isEqualTo(member.phoneNumber)
+        assertThat(request.role).isEqualTo(member.role)
+    }
+
+
+    @ParameterizedTest
     @ValueSource(strings = ["tester@test", "", "tester", "tester@"])
     fun `createMember - fail = email pattern wrong`(email: String) {
         val admin = aMember(role = Role.ADMIN)
@@ -56,5 +84,16 @@ class MemberTest {
         assertThatThrownBy { admin.createMember(request) { "token" } }
             .isInstanceOf(IllegalArgumentException::class.java)
             .hasMessageContaining("이메일 형식이 올바르지 않습니다.")
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = ["--", "0000-00-0000", "000-0000-000a", "000-0-0000"])
+    fun `createMember - fail = phoneNumber pattern wrong`(phoneNumber: String) {
+        val admin = aMember(role = Role.ADMIN)
+        val request = aMemberRequest(phoneNumber = phoneNumber)
+
+        assertThatThrownBy { admin.createMember(request) { "token" } }
+            .isInstanceOf(IllegalArgumentException::class.java)
+            .hasMessageContaining("전화번호 형식이 올바르지 않습니다.")
     }
 }
