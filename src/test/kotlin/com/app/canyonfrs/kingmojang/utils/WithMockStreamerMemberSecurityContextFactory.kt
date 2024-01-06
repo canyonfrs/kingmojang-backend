@@ -2,7 +2,7 @@ package com.app.canyonfrs.kingmojang.utils
 
 import com.app.canyonfrs.kingmojang.member.MemberFixture.Companion.aMember
 import com.app.canyonfrs.kingmojang.member.Role
-import com.app.canyonfrs.kingmojang.memo.MemoDocumentTest.Companion.TEST_STREAMER_TOKEN
+import com.app.canyonfrs.kingmojang.memopad.MemoPadDocumentTest.Companion.TEST_STREAMER_TOKEN
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority

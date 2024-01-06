@@ -1,4 +1,4 @@
-package com.app.canyonfrs.kingmojang.memo
+package com.app.canyonfrs.kingmojang.memopad
 
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -12,14 +12,14 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
 
 @SpringBootTest
 @AutoConfigureMockMvc
-class MemoAcceptanceTest {
+class MemoPadAcceptanceTest {
     @Autowired
     private lateinit var mockMvc: MockMvc
 
     @Test
     fun `POST memo 201 created`() {
         mockMvc.perform(
-            post("/api/v1/memos")
+            post("/api/v1/memo-pads")
                 .header("Authorization", "Bearer streamer_token")
                 .contentType("application/json")
         )
@@ -30,7 +30,7 @@ class MemoAcceptanceTest {
     @Test
     fun `PUT memo 200 ok`() {
         mockMvc.perform(
-            put("/api/v1/memos/{memoId}", 1)
+            put("/api/v1/memo-pads/{memoId}", 1)
                 .content(
                     """
                     {
@@ -48,7 +48,7 @@ class MemoAcceptanceTest {
     @Test
     fun `GET memo 200 ok`() {
         mockMvc.perform(
-            get("/api/v1/memos/{memoId}", 1)
+            get("/api/v1/memo-pads/{memoId}", 1)
                 .contentType("application/json")
         )
             .andExpect(status().isOk)
@@ -65,7 +65,7 @@ class MemoAcceptanceTest {
     @Test
     fun `GET memos 200 ok`() {
         mockMvc.perform(
-            get("/api/v1/memos")
+            get("/api/v1/memo-pads")
                 .contentType("application/json")
                 .queryParam("pageSize", "10")
                 .queryParam("lastCursorId", "1")
