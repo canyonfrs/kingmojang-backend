@@ -10,3 +10,7 @@ spring:
   docker:
     compose:
       enabled: false
+
+
+cors:
+  allowed-origins: "*"
